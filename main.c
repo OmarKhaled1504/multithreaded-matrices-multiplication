@@ -1,19 +1,63 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-#define r1 4
-#define c1 4
-#define r2 4
-#define c2 4
+#include <malloc.h>
 
-void multiply(int matrix1[][c1], int matrix2[][c2]) {
-    int result[2][2];
-    for (int i = 0; i < r1; i++) {
-        for (int j = 0; j < c2; ++j) {
-            result[i][j] = 0;
-            for (int k = 0; k < r2; k++)
-                result[i][j] += matrix1[i][k] * matrix2[k][j];
-            printf("%d\t", result[i][j]);
+int rows1, columns1, rows2, columns2;
+int **m1; //matrix 1
+int **m2; //matrix 2
+int **mr; //result matrix
+void input() {
+    char fname[100];
+    printf("Enter file name: ");
+    scanf("%s", &fname);
+    FILE *fp = fopen(fname, "r");
+    fscanf(fp, "%d%d", &rows1, &columns1);
+    m1 = (int **) malloc(rows1 * sizeof(int *));
+    for (int i = 0; i < rows1; ++i) {
+        m1[i] = (int *) malloc(columns1 * sizeof(int *));
+    }
+    for (int i = 0; i < rows1; i++)
+        for (int j = 0; j < columns1; j++) {
+            fscanf(fp, "%d ", &m1[i][j]);
+        }
+    fscanf(fp, "%d%d", &rows2, &columns2);
+    m2 = (int **) malloc(rows2 * sizeof(int *));
+    for (int i = 0; i < rows2; ++i) {
+        m2[i] = (int *) malloc(columns2 * sizeof(int *));
+    }
+    for (int i = 0; i < rows2; i++)
+        for (int j = 0; j < columns2; j++) {
+            fscanf(fp, "%d ", &m2[i][j]);
+        }
+    printf("Input matrices: \n");
+    printf("Matrix 1: \n");
+    for (int i = 0; i < rows1; i++) {
+        for (int j = 0; j < columns1; j++) {
+            printf("%d ", m1[i][j]);
+        }
+        printf("\n");
+    }
+    printf("Matrix 2: \n");
+    for (int i = 0; i < rows2; i++) {
+        for (int j = 0; j < columns2; j++) {
+            printf("%d ", m2[i][j]);
+        }
+        printf("\n");
+    }
+
+}
+
+void multiply() {
+    mr = (int **) malloc(rows1 * sizeof(int *));
+    for (int i = 0; i < rows1; ++i) {
+        mr[i] = (int *) malloc(columns2 * sizeof(int *));
+    }
+    for (int i = 0; i < rows1; i++) {
+        for (int j = 0; j < columns2; ++j) {
+            mr[i][j] = 0;
+            for (int k = 0; k < rows2; k++)
+                mr[i][j] += m1[i][k] * m2[k][j];
+            printf("%d\t", mr[i][j]);
         }
         printf("\n");
     }
@@ -21,22 +65,8 @@ void multiply(int matrix1[][c1], int matrix2[][c2]) {
 
 int main() {
 
-    int matrix1[r1][c1] = {
-            {1, 1, 1, 1},
-            {2, 2, 2, 2},
-            {3, 3, 3, 3},
-            {4, 4, 4, 4}
-    };
+    input();
+    multiply();
 
-    int matrix2[r2][c2] = {
-            {1, 1, 1, 1},
-            {2, 2, 2, 2},
-            {3, 3, 3, 3},
-            {4, 4, 4, 4}
-    };
-    if (c1 == c2)
-        multiply(matrix1, matrix2);
-    else
-        printf("# of columns in matrix 1 not equal to the # of rows in matrix 2\n");
     return 0;
 }
