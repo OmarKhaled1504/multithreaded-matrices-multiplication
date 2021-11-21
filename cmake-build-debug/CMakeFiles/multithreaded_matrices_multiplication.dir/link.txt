@@ -1,1 +1,0 @@
-/usr/bin/cc -g CMakeFiles/multithreaded_matrices_multiplication.dir/main.c.o -o multithreaded_matrices_multiplication 
